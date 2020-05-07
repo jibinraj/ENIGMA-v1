@@ -40,7 +40,7 @@ class pack():
 
 class read_data(threading.Thread) :
     def run (self):
-##        print "read"
+##        print ("read")
         global flag
         r=1
         while len(tmp.files)>0 or len(tmp.paths)>0:
@@ -53,11 +53,11 @@ class read_data(threading.Thread) :
                 elif r==0:
                     r=1
                 pack.size1=0
-                ##print "READING:",tmp.paths
+                ##print ("READING:",tmp.paths)
                 f1=open(tmp.paths[0],'rb')
                 a="1"
                 while a!="":
-##                    print "reading"
+##                    print ("reading")
                     if (pack.size1+10000000)<tmp.total :
                         a=f1.read(10000000)
                         pack.data[r].append(a)
@@ -66,9 +66,9 @@ class read_data(threading.Thread) :
                         a=f1.read()
                         pack.data[r].append(a)
                         pack.size1+=len(a)
-##                print "read_finished:",tmp.paths
+##                print ("read_finished:",tmp.paths)
                 flag+=1
-##                print len(tmp.files),";",len(tmp.pathd)
+##                print (len(tmp.files),";",len(tmp.pathd))
                 del tmp.paths[0]
                 if len(tmp.files)>0 :
                     del tmp.files[0]
@@ -78,14 +78,14 @@ class read_data(threading.Thread) :
         
 class write_data(threading.Thread) :
     def run (self) :
-##        print "write"
+##        print ("write")
         global rd_trd
         global flag
         global flag1
         global selfg
         w=1
         ##time.sleep(1)
-        ##print "WRITING:",tmp.pathd
+        ##print ("WRITING:",tmp.pathd)
         ##time.sleep(1)
         
         while rd_trd.is_alive() or len(tmp.pathd)>0  :
@@ -97,18 +97,18 @@ class write_data(threading.Thread) :
                 pack.size2=0
                 pack.size3=0
     ##            while len(tmp.pathd)==0 and rd_trd.is_alive() :
-    ##                print "wait"
+    ##                print ("wait")
                 f2=open(tmp.pathd[0],'wb')
-               ## print tmp.pathd[0],"---writing"
+               ## print (tmp.pathd[0],"---writing")
                 while len(pack.data[w])>0 or flag==0:
                     if len(pack.data[w])>0 :
-##                        print "writing"
+##                        print ("writing")
                         f2.write(pack.data[w][0])
                         pack.size2+=len(pack.data[w][0])
                         pack.size3+=len(pack.data[w][0])
                         del pack.data[w][0]
                 f2.close()
-##                print "writing finished",tmp.pathd
+##                print ("writing finished",tmp.pathd)
                 del tmp.pathd[0]
                 flag-=1
                 flag1=1
@@ -116,7 +116,7 @@ class write_data(threading.Thread) :
         ##del tmp.sizes[0]
         
         #############################
-        print " WRITE finished:"
+        print (" WRITE finished:")
 
 
 
@@ -167,10 +167,10 @@ class MyFileDropTarget(wx.FileDropTarget):
         const.filesize.append(b)
         self.window.AppendText("\t\t\tTotal=%s\n"%(self.size_conv(totalsize)) )
         self.window.AppendText("______________________________________________________________________\n")
-        #print const.sizelist
-        #print const.filelist
-        #print const.filesize
-        #print const.sourcelist
+        #print (const.sizelist)
+        #print (const.filelist)
+        #print (const.filesize)
+        #print (const.sourcelist)
     def calc(self,path) :
         size=0
         for item in os.listdir(path) :
@@ -193,9 +193,9 @@ class MyFileDropTarget(wx.FileDropTarget):
         elif size/(1024*1024) <1024 :
             size=size/(1024*1024.0)
             s=str(size)
-            print "ds"
+            print ("ds")
             if '.' in s :
-                print "mb"
+                print ("mb")
                 i=str(size).index('.')+3
                 s=s[:i]
             return s+" MB"
@@ -544,16 +544,16 @@ class frame3 ( wx.Frame ):
     
     # Virtual event handlers, overide them in your derived class
     def filfo(self) :
-##        print "filefo:",len(tmp.files)
+##        print ("filefo:",len(tmp.files))
         if os.path.isdir(tmp.files[0]) :
             self._folder(tmp.files[0])
         else :
             self._file(tmp.files[0])
             
     def _folder(self,fol) :
-##        print "folder"
+##        print ("folder")
         tar=self.splitpath(fol)
-##        print tar
+##        print (tar)
         path1=tmp.target+os.sep+tar
         if os.path.isdir(path1):
             pass
@@ -562,19 +562,19 @@ class frame3 ( wx.Frame ):
         _list=os.listdir(fol)
         del tmp.files[0]
         for item in _list :
-##            print item
+##            print (item)
             item=fol+os.sep+item
             tmp.files.insert(0,item)
             tmp.sizes.insert(0,os.path.getsize(item))
-##        print tmp.files
+##        print (tmp.files)
         self.filfo()
         
             
     def _file(self,fil) :
-##        print "file"
+##        print ("file")
         tar=self.splitpath(fil)
-##        print "paths=",fil
-##        print "pathd=",tmp.target+os.sep+tar
+##        print ("paths=",fil)
+##        print ("pathd=",tmp.target+os.sep+tar)
         tmp.paths.append(fil)
         tmp.pathd.append(tmp.target+os.sep+tar)
 
@@ -588,7 +588,7 @@ class frame3 ( wx.Frame ):
             path1,path2=os.path.split(path1)
             tar=path2+os.sep+tar
             path1=path1.replace('//','/')
-##            print tar
+##            print (tar)
         return tar
 
 
@@ -600,7 +600,7 @@ class frame3 ( wx.Frame ):
         self.trdr=read_data()
         self.trdr.start()
         clock.start_time=datetime.datetime.now()
-        print clock.start_time
+        print (clock.start_time)
         rd_trd=self.trdr
         self.trdw=write_data()
         self.trdw.start()
@@ -642,13 +642,13 @@ class frame3 ( wx.Frame ):
             self.statictext7.SetLabel("{0:.3}%".format(step1))
             self.Update()
             end_time=datetime.datetime.now()
-##            print "updating"
+##            print ("updating")
             ############################################
-##            print "read:",(pack.size1*1.0),"-",(self.size[0]*1.0),"%"
+##            print ("read:",(pack.size1*1.0),"-",(self.size[0]*1.0),"%")
         else :
             self.gauge1.SetValue(100)
             self.Update()
-            print "exiting"
+            print ("exiting")
             flag1=0
             if (len(tmp.files)>0) or len(tmp.pathd)>0:
                 self.statictext1.SetLabel(os.path.split(tmp.files[0])[1])
